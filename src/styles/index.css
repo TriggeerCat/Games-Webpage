@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+.animate-gradient {
+    animation: text-gradient 10s linear infinite;
+}
+
+@keyframes text-gradient {
+    0% {
+        background-position: 0 50%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+.floating-up-down {
+    animation: joker-balatro 1s ease-in-out infinite alternate;
+}
+
+@keyframes joker-balatro {
+    0% {
+        transform: translateY(-2px);
+    }
+    100% {
+        transform: translateY(2px);
+    }
+}
