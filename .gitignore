@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+backend/.env
+mongo
+docker-compose.yml
+Dockerfile
+init-mongo.js
+nginx.conf
+client
