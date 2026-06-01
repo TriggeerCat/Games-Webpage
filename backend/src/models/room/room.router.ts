@@ -8,8 +8,8 @@ const router = Router();
 router.get("/", roomController.findAll);
 router.get("/:code", roomController.findOneByCode);
 router.post("/", playerMiddleware.requirePlayer, roomController.create);
-router.patch("/", roomController.updateHost); // TODO
-router.delete("/:id", roomController.delete);
-//addPlayer
+router.patch("/transfer-host", roomController.transferHost);
+router.patch("/add-player", roomController.addPlayer);
+router.delete("/", roomController.delete);
 
 export const roomRouter = router;

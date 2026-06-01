@@ -1,7 +1,6 @@
 ﻿import { NextFunction, Request, Response } from "express";
 
 import { STATUS_CODE } from "../../enums/status-code.enum";
-import { IPlayer } from "../player/player.inteface";
 import { roomService } from "./room.service";
 
 class RoomController {
@@ -14,9 +13,15 @@ class RoomController {
         }
     }
 
-    public async findOneByCode(req: Request, res: Response, next: NextFunction) {
+    public async findOneByCode(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         try {
-            const data = await roomService.findOneByCode(req.params.code as string);
+            const data = await roomService.findOneByCode(
+                req.params.code as string
+            );
             res.status(STATUS_CODE.NO_CONTENT).json(data);
         } catch (e) {
             next(e);
@@ -25,16 +30,34 @@ class RoomController {
 
     public async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await roomService.create(res.locals.player as IPlayer, req.body.maxPlayers);
+            const data = await roomService.create(
+                res.locals.player._id,
+                req.body.maxPlayers as number
+            );
             res.status(STATUS_CODE.CREATED).json(data);
         } catch (e) {
             next(e);
         }
     }
 
-    public async updateHost(req: Request, res: Response, next: NextFunction) {
+    public async transferHost(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await roomService.updateHost(req.params.code as string, req.body.host as IPlayer);
+            const data = await roomService.transferHost(
+                req.body.code as string,
+                req.body.hostId as string
+            );
+            res.status(STATUS_CODE.OK).json(data);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async addPlayer(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await roomService.addPlayer(
+                req.body.code as string,
+                req.body.playerId as string
+            );
             res.status(STATUS_CODE.OK).json(data);
         } catch (e) {
             next(e);
@@ -43,7 +66,7 @@ class RoomController {
 
     public async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await roomService.delete(req.params.code as string);
+            const data = await roomService.delete(req.body.code as string);
             res.status(STATUS_CODE.OK).json(data);
         } catch (e) {
             next(e);

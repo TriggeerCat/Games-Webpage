@@ -1,4 +1,4 @@
-﻿import { HydratedDocument, model, Schema } from "mongoose";
+﻿import { model, Schema } from "mongoose";
 
 import { IPlayer } from "./player.inteface";
 
@@ -9,6 +9,4 @@ export const playerSchema = new Schema(
     { timestamps: true, versionKey: false }
 );
 
-export const PlayerModel = model<IPlayer>("player", playerSchema);
-
-export type PlayerDocument = HydratedDocument<IPlayer>;
+export const PlayerModel = model<IPlayer>("Player", playerSchema);

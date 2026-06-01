@@ -1,9 +1,7 @@
-﻿import { IPlayer } from "../player/player.inteface";
-
-export interface IRoom {
+﻿export interface IRoom {
     code: string;
-    host: IPlayer;
-    players: IPlayer[];
+    hostId: string;
+    playersId: string[];
     isGameStillOn: boolean;
     maxPlayers: number;
 }

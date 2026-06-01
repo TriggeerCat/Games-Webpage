@@ -5,14 +5,23 @@ import { ApiError } from "../api/api.error";
 import { playerService } from "./player.service";
 
 class PlayerMiddleware {
-    public async requirePlayer(req: Request, res: Response, next: NextFunction) {
+    public async requirePlayer(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         const id = req.cookies.playerId;
         if (!id) next(new ApiError("Invalid ID", STATUS_CODE.NOT_FOUND));
 
         const player = await playerService.findOneById(id);
-        if (!player) next(new ApiError("Player not found", STATUS_CODE.NOT_FOUND));
+        if (!player)
+            next(new ApiError("Player not found", STATUS_CODE.NOT_FOUND));
+
+        console.log(player);
 
         res.locals.player = player;
+
+        console.log(res.locals.player);
 
         next();
     }

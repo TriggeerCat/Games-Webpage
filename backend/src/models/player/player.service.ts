@@ -9,13 +9,21 @@ class PlayerService {
 
     public async findOneById(_id: string) {
         const player = await PlayerModel.findById(_id);
-        if (!player) throw new ApiError("Player not found (one by id)", STATUS_CODE.NOT_FOUND);
+        if (!player)
+            throw new ApiError(
+                "Player not found (one by id)",
+                STATUS_CODE.NOT_FOUND
+            );
         return player;
     }
 
     public async findManyByNickname(nickname: string) {
         const player = await PlayerModel.find({ nickname });
-        if (!player) throw new ApiError("Player not found (many by nickname)", STATUS_CODE.NOT_FOUND);
+        if (!player)
+            throw new ApiError(
+                "Player not found (many by nickname)",
+                STATUS_CODE.NOT_FOUND
+            );
         return player;
     }
 
@@ -23,9 +31,25 @@ class PlayerService {
         return PlayerModel.create({ nickname });
     }
 
+    public async changeNickname(_id: string, newName: string) {
+        const player = await PlayerModel.findByIdAndUpdate(_id, {
+            name: newName
+        });
+        if (!player)
+            throw new ApiError(
+                "Player not found (delete)",
+                STATUS_CODE.NOT_FOUND
+            );
+        return player;
+    }
+
     public async delete(_id: string) {
         const player = await PlayerModel.findByIdAndDelete(_id);
-        if (!player) throw new ApiError("Player not found (delete)", STATUS_CODE.NOT_FOUND);
+        if (!player)
+            throw new ApiError(
+                "Player not found (delete)",
+                STATUS_CODE.NOT_FOUND
+            );
         return player;
     }
 }
