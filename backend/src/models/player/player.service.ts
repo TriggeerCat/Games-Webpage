@@ -31,10 +31,12 @@ class PlayerService {
         return PlayerModel.create({ nickname });
     }
 
-    public async changeNickname(_id: string, newName: string) {
-        const player = await PlayerModel.findByIdAndUpdate(_id, {
-            name: newName
-        });
+    public async changeNickname(_id: string, nickname: string) {
+        const player = await PlayerModel.findByIdAndUpdate(
+            _id,
+            { nickname },
+            { returnDocument: "after" }
+        );
         if (!player)
             throw new ApiError(
                 "Player not found (delete)",

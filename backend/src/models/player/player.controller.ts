@@ -71,6 +71,22 @@ class PlayerController {
         }
     }
 
+    public async changeNickname(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const data = await playerService.changeNickname(
+                res.locals.player._id as string,
+                req.body.nickname as string
+            );
+            res.status(STATUS_CODE.OK).json(data);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     public async delete(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await playerService.delete(req.params.id as string);

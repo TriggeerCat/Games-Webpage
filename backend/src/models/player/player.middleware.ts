@@ -17,11 +17,7 @@ class PlayerMiddleware {
         if (!player)
             next(new ApiError("Player not found", STATUS_CODE.NOT_FOUND));
 
-        console.log(player);
-
         res.locals.player = player;
-
-        console.log(res.locals.player);
 
         next();
     }

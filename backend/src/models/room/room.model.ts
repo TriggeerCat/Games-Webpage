@@ -6,7 +6,9 @@ const roomSchema = new Schema(
     {
         code: { type: String, required: true, unique: true },
         hostId: { type: Schema.Types.ObjectId, ref: "Player", required: true },
-        playersId: [{ type: Schema.Types.ObjectId, ref: "Player" }],
+        playersId: [
+            { type: Schema.Types.ObjectId, ref: "Player", required: true }
+        ],
         isGameStillOn: { type: Boolean, default: false },
         maxPlayers: { type: Number, required: true }
     },

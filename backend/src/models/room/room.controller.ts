@@ -22,7 +22,7 @@ class RoomController {
             const data = await roomService.findOneByCode(
                 req.params.code as string
             );
-            res.status(STATUS_CODE.NO_CONTENT).json(data);
+            res.status(STATUS_CODE.OK).json(data);
         } catch (e) {
             next(e);
         }
@@ -43,7 +43,8 @@ class RoomController {
     public async transferHost(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await roomService.transferHost(
-                req.body.code as string,
+                req.params.code as string,
+                res.locals.player._id as string,
                 req.body.hostId as string
             );
             res.status(STATUS_CODE.OK).json(data);
@@ -55,7 +56,7 @@ class RoomController {
     public async addPlayer(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await roomService.addPlayer(
-                req.body.code as string,
+                req.params.code as string,
                 req.body.playerId as string
             );
             res.status(STATUS_CODE.OK).json(data);
@@ -66,7 +67,19 @@ class RoomController {
 
     public async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await roomService.delete(req.body.code as string);
+            const data = await roomService.delete(req.params.code as string);
+            res.status(STATUS_CODE.OK).json(data);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async deletePlayer(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await roomService.deletePlayer(
+                req.params.code as string,
+                req.body.playerId as string
+            );
             res.status(STATUS_CODE.OK).json(data);
         } catch (e) {
             next(e);
