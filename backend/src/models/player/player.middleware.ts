@@ -11,11 +11,13 @@ class PlayerMiddleware {
         next: NextFunction
     ) {
         const id = req.cookies.playerId;
-        if (!id) next(new ApiError("Invalid ID", STATUS_CODE.NOT_FOUND));
+        if (!id) return next(new ApiError("Invalid ID", STATUS_CODE.NOT_FOUND));
 
         const player = await playerService.findOneById(id);
         if (!player)
-            next(new ApiError("Player not found", STATUS_CODE.NOT_FOUND));
+            return next(
+                new ApiError("Player not found", STATUS_CODE.NOT_FOUND)
+            );
 
         res.locals.player = player;
 

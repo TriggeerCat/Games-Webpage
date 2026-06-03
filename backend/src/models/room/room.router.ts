@@ -14,40 +14,40 @@ const router = Router();
 router.get("/", roomController.findAll);
 router.get(
     "/:code",
-    schemaMiddleware.validateParams(roomCodeSchema),
+    schemaMiddleware.validate(roomCodeSchema, "params"),
     roomController.findOneByCode
 );
 
 router.post(
     "/",
-    schemaMiddleware.validateBody(roomMaxPlayersSchema),
+    schemaMiddleware.validate(roomMaxPlayersSchema, "body"),
     playerMiddleware.requirePlayer,
     roomController.create
 );
 router.post(
     "/:code/players",
-    schemaMiddleware.validateParams(roomCodeSchema),
-    schemaMiddleware.validateBody(idSchema("playerId")),
+    schemaMiddleware.validate(roomCodeSchema, "params"),
+    schemaMiddleware.validate(idSchema("playerId"), "body"),
     roomController.addPlayer
 );
 
 router.patch(
     "/:code/players/transfer-host",
-    schemaMiddleware.validateParams(roomCodeSchema),
-    schemaMiddleware.validateBody(idSchema("hostId")),
+    schemaMiddleware.validate(roomCodeSchema, "params"),
+    schemaMiddleware.validate(idSchema("hostId"), "body"),
     playerMiddleware.requirePlayer,
     roomController.transferHost
 );
 
 router.delete(
     "/:code",
-    schemaMiddleware.validateParams(roomCodeSchema),
+    schemaMiddleware.validate(roomCodeSchema, "params"),
     roomController.delete
 );
 router.delete(
     "/:code/players",
-    schemaMiddleware.validateParams(roomCodeSchema),
-    schemaMiddleware.validateBody(idSchema("playerId")),
+    schemaMiddleware.validate(roomCodeSchema, "params"),
+    schemaMiddleware.validate(idSchema("playerId"), "body"),
     roomController.deletePlayer
 );
 

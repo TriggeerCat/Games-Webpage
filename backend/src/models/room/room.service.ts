@@ -50,13 +50,12 @@ class RoomService {
                 STATUS_CODE.NOT_FOUND
             );
 
-        // disabled for debugging purposes
-        // if (room.hostId.toString() !== currentHostId.toString()) {
-        //     throw new ApiError(
-        //         "Thou art not host (transfer host)",
-        //         STATUS_CODE.FORBIDDEN
-        //     );
-        // }
+        if (room.hostId.toString() !== currentHostId.toString()) {
+            throw new ApiError(
+                "Thou art not host (transfer host)",
+                STATUS_CODE.FORBIDDEN
+            );
+        }
 
         const newRoom = await RoomModel.findOneAndUpdate(
             { code },
