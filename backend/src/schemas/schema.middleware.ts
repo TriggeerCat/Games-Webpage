@@ -6,26 +6,11 @@ import { STATUS_CODE } from "../enums/status-code.enum";
 import { ApiError } from "../models/api/api.error";
 
 class SchemaMiddleware {
-    public validateParams(zodObject: ZodObject) {
+    public validate(zodObject: ZodObject, target: "body" | "params" | "query") {
         return async (req: Request, res: Response, next: NextFunction) => {
-            const result = zodObject.safeParse(req.params);
+            const result = zodObject.safeParse(req[target]);
             if (!result.success) {
-                next(
-                    new ApiError(
-                        fromZodError(result.error).message,
-                        STATUS_CODE.BAD_REQUEST
-                    )
-                );
-            }
-            next();
-        };
-    }
-
-    public validateBody(zodObject: ZodObject) {
-        return async (req: Request, res: Response, next: NextFunction) => {
-            const result = zodObject.safeParse(req.body);
-            if (!result.success) {
-                next(
+                return next(
                     new ApiError(
                         fromZodError(result.error).message,
                         STATUS_CODE.BAD_REQUEST

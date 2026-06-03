@@ -13,26 +13,26 @@ router.get("/me", playerMiddleware.requirePlayer, playerController.findMe);
 router.get("/nickname/:nickname", playerController.findManyByNickname);
 router.get(
     "/id/:_id",
-    schemaMiddleware.validateParams(idSchema("_id")),
+    schemaMiddleware.validate(idSchema("_id"), "params"),
     playerController.findOneById
 );
 
 router.post(
     "/",
-    schemaMiddleware.validateBody(playerSchema),
+    schemaMiddleware.validate(playerSchema, "body"),
     playerController.create
 );
 
 router.patch(
     "/",
-    schemaMiddleware.validateBody(playerSchema),
+    schemaMiddleware.validate(playerSchema, "body"),
     playerMiddleware.requirePlayer,
     playerController.changeNickname
 );
 
 router.delete(
     "/:_id",
-    schemaMiddleware.validateParams(idSchema("_id")),
+    schemaMiddleware.validate(idSchema("_id"), "params"),
     playerController.delete
 );
 

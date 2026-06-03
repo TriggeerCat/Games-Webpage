@@ -2,8 +2,8 @@
 
 import { STATUS_CODE } from "../../enums/status-code.enum";
 import { ApiError } from "../api/api.error";
-import { IPlayer } from "./player.inteface";
 import { playerService } from "./player.service";
+import { IPlayer } from "./player.types";
 
 class PlayerController {
     public async findAll(req: Request, res: Response, next: NextFunction) {

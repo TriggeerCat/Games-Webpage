@@ -1,6 +1,6 @@
 ﻿import { model, Schema } from "mongoose";
 
-import { IPlayer } from "./player.inteface";
+import { IPlayer } from "./player.types";
 
 const playerSchema = new Schema(
     {
