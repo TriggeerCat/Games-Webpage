@@ -1,6 +1,4 @@
-﻿import { createServer } from "node:http";
-
-import cookieParser from "cookie-parser";
+﻿import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
@@ -11,8 +9,6 @@ import { ApiError } from "./models/api/api.error";
 import { apiRouter } from "./models/api/api.router";
 
 const app = express();
-
-const httpServer = createServer(app);
 
 app.use(cors());
 app.use(helmet());
@@ -39,7 +35,7 @@ process.on("uncaughtException", (error) => {
 const start = async () => {
     try {
         await connectToDB();
-        httpServer.listen(envData.SERVER_PORT, () => {
+        app.listen(envData.SERVER_PORT, () => {
             console.log("Merry Christmas!");
         });
     } catch (e) {

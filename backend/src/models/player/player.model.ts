@@ -2,7 +2,7 @@
 
 import { IPlayer } from "./player.inteface";
 
-const playerSchema = new Schema(
+export const playerSchema = new Schema(
     {
         nickname: { type: String, required: true }
     },

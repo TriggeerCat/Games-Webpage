@@ -18,7 +18,7 @@ class PlayerController {
     public async findOneById(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await playerService.findOneById(
-                req.params._id as string
+                req.params.id as string
             );
             res.status(STATUS_CODE.OK).json(data);
         } catch (e) {
@@ -89,7 +89,7 @@ class PlayerController {
 
     public async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await playerService.delete(req.params._id as string);
+            const data = await playerService.delete(req.params.id as string);
             res.status(STATUS_CODE.OK).json(data);
         } catch (e) {
             next(e);
