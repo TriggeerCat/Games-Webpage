@@ -9,6 +9,7 @@ import { connectToDB } from "./db/mongoose";
 import envData from "./env/env";
 import { ApiError } from "./models/api/api.error";
 import { apiRouter } from "./models/api/api.router";
+import { addSocket } from "./socket";
 
 const app = express();
 
@@ -35,6 +36,8 @@ process.on("uncaughtException", (error) => {
     console.log("Uncaught Exception", error);
     process.exit(1);
 });
+
+addSocket(httpServer);
 
 const start = async () => {
     try {

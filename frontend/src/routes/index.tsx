@@ -1,5 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {CoolLink} from "../components/CoolLink.tsx";
+import {CoolLink} from "../components/CoolLink";
+import React from "react";
+import "../sockets/connection.socket";
 
 export const Route = createFileRoute('/')({
     component: RouteComponent,

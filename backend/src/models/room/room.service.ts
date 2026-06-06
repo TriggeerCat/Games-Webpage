@@ -88,6 +88,21 @@ class RoomService {
         return room;
     }
 
+    public async changeGameStatus(code: string) {
+        const room = await RoomModel.findOneAndUpdate(
+            { code },
+            { isGameStillOn: { $not: "$isGameStillOn" } },
+            { returnDocument: "after" }
+        ).populate("hostId playersId");
+
+        if (!room)
+            throw new ApiError(
+                "Room not found (add player)",
+                STATUS_CODE.NOT_FOUND
+            );
+        return room;
+    }
+
     public async delete(code: string) {
         const room = await RoomModel.findOneAndDelete({ code }).populate(
             "hostId playersId"
