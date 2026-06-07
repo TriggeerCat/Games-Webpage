@@ -1,9 +1,6 @@
 ﻿import dotenv from "dotenv";
 import z from "zod";
 
-import { STATUS_CODE } from "../enums/status-code.enum";
-import { ApiError } from "../models/api/api.error";
-
 dotenv.config();
 
 const envSchema = z.object({
@@ -30,10 +27,7 @@ if (!env.success) {
         "Environment variables validation failure:",
         z.treeifyError(env.error)
     );
-    throw new ApiError(
-        "Invalid environment variables",
-        STATUS_CODE.BAD_REQUEST
-    );
+    throw new Error("Invalid environment variables");
 }
 
 const envData = env.data;

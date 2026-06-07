@@ -50,13 +50,6 @@ class RoomService {
                 STATUS_CODE.NOT_FOUND
             );
 
-        if (room.hostId.toString() !== currentHostId.toString()) {
-            throw new ApiError(
-                "Thou art not host (transfer host)",
-                STATUS_CODE.FORBIDDEN
-            );
-        }
-
         const newRoom = await RoomModel.findOneAndUpdate(
             { code },
             { hostId: newHostId },
@@ -89,18 +82,22 @@ class RoomService {
     }
 
     public async changeGameStatus(code: string) {
-        const room = await RoomModel.findOneAndUpdate(
-            { code },
-            { isGameStillOn: { $not: "$isGameStillOn" } },
-            { returnDocument: "after" }
-        ).populate("hostId playersId");
-
-        if (!room)
+        const room = await RoomModel.findOne({ code });
+        if (!room) {
             throw new ApiError(
-                "Room not found (add player)",
+                "Room not found (change game status)",
                 STATUS_CODE.NOT_FOUND
             );
-        return room;
+        }
+
+        const isGameStillOn = !room.isGameStillOn;
+
+        const updatedRoom = await RoomModel.findOneAndUpdate(
+            { code },
+            { isGameStillOn },
+            { returnDocument: "after" }
+        ).populate("hostId playersId");
+        return updatedRoom;
     }
 
     public async delete(code: string) {
@@ -140,6 +137,17 @@ class RoomService {
         ).populate("hostId playersId");
 
         return newRoom;
+    }
+
+    public async isPlayerHost(code: string, playerId: string) {
+        const room = await RoomModel.findOne({ code });
+        if (!room) {
+            throw new ApiError(
+                "Room not found (delete player)",
+                STATUS_CODE.NOT_FOUND
+            );
+        }
+        return room.hostId.toString() === playerId;
     }
 }
 

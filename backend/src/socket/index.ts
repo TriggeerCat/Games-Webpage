@@ -3,11 +3,13 @@
 import { Server as SocketIOServer } from "socket.io";
 
 import envData from "../env/env";
+import { playerService } from "../models/player/player.service";
 import {
+    changeGameStatusHandler,
     disconnectFromRoomHandler,
     joinRoomHandler,
-    sendMessageHandler,
-    startGameHandler
+    leaveRoomHandler,
+    sendMessageHandler
 } from "./handlers/room.handler";
 
 export const addSocket = (httpServer: HttpServer) => {
@@ -17,10 +19,23 @@ export const addSocket = (httpServer: HttpServer) => {
         }
     });
 
+    io.use(async (socket, next) => {
+        try {
+            const playerId: string = socket.handshake.auth.playerId;
+            if (!playerId) socket.disconnect();
+            await playerService.findOneById(playerId);
+            socket.data.socketDataState = { playerId };
+            next();
+        } catch {
+            socket.disconnect();
+        }
+    });
+
     io.on("connection", (socket) => {
-        joinRoomHandler(io, socket).then();
-        disconnectFromRoomHandler(io, socket).then();
-        startGameHandler(io, socket).then();
-        sendMessageHandler(io, socket).then();
+        joinRoomHandler(io, socket);
+        leaveRoomHandler(io, socket);
+        disconnectFromRoomHandler(io, socket);
+        changeGameStatusHandler(io, socket);
+        sendMessageHandler(io, socket);
     });
 };
