@@ -44,7 +44,6 @@ class RoomController {
         try {
             const data = await roomService.transferHost(
                 req.params.code as string,
-                res.locals.player._id as string,
                 req.body.hostId as string
             );
             res.status(STATUS_CODE.OK).json(data);

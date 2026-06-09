@@ -6,6 +6,7 @@ import envData from "../env/env";
 import { playerService } from "../models/player/player.service";
 import {
     changeGameStatusHandler,
+    debugCreateRoom,
     disconnectFromRoomHandler,
     joinRoomHandler,
     leaveRoomHandler,
@@ -37,5 +38,7 @@ export const addSocket = (httpServer: HttpServer) => {
         disconnectFromRoomHandler(io, socket);
         changeGameStatusHandler(io, socket);
         sendMessageHandler(io, socket);
+
+        debugCreateRoom(io, socket);
     });
 };

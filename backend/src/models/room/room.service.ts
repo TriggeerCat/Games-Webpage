@@ -17,9 +17,15 @@ class RoomService {
         return room;
     }
 
-    public async create(hostId: string, maxPlayers: number) {
+    public async create(
+        hostId: string,
+        maxPlayers: number,
+        debugCode?: string
+    ) {
         while (true) {
-            const code = generateRoomCode();
+            let code;
+            if (debugCode) code = debugCode;
+            else code = generateRoomCode();
             if (!(await RoomModel.findOne({ code })))
                 return await RoomModel.create({
                     code,
@@ -30,11 +36,7 @@ class RoomService {
         }
     }
 
-    public async transferHost(
-        code: string,
-        currentHostId: string,
-        newHostId: string
-    ) {
+    public async transferHost(code: string, newHostId: string) {
         const room = await RoomModel.findOne({ code });
         if (!room)
             throw new ApiError(
@@ -42,7 +44,9 @@ class RoomService {
                 STATUS_CODE.NOT_FOUND
             );
 
-        const isPlayerInRoom = room.playersId.includes(newHostId);
+        const isPlayerInRoom = (await this.getPlayersIdList(code)).includes(
+            newHostId
+        );
         const newHost = await playerService.findOneById(newHostId);
         if (!isPlayerInRoom || !newHost)
             throw new ApiError(
@@ -67,18 +71,25 @@ class RoomService {
                 STATUS_CODE.NOT_FOUND
             );
 
-        const room = await RoomModel.findOneAndUpdate(
-            { code },
-            { $addToSet: { playersId: player._id } },
-            { returnDocument: "after" }
-        ).populate("hostId playersId");
-
+        const room = await RoomModel.findOne({ code });
         if (!room)
             throw new ApiError(
                 "Room not found (add player)",
                 STATUS_CODE.NOT_FOUND
             );
-        return room;
+
+        if (room.playersId.length >= room.maxPlayers)
+            throw new ApiError(
+                "Too many players (add player)",
+                STATUS_CODE.NOT_FOUND
+            );
+
+        const updatedRoom = await RoomModel.findOneAndUpdate(
+            { code },
+            { $addToSet: { playersId: player._id } },
+            { returnDocument: "after" }
+        ).populate("hostId playersId");
+        return updatedRoom;
     }
 
     public async changeGameStatus(code: string) {
@@ -143,11 +154,22 @@ class RoomService {
         const room = await RoomModel.findOne({ code });
         if (!room) {
             throw new ApiError(
-                "Room not found (delete player)",
+                "Room not found (is player host)",
                 STATUS_CODE.NOT_FOUND
             );
         }
         return room.hostId.toString() === playerId;
+    }
+
+    public async getPlayersIdList(code: string) {
+        const room = await RoomModel.findOne({ code });
+        if (!room) {
+            throw new ApiError(
+                "Room not found (get player list)",
+                STATUS_CODE.NOT_FOUND
+            );
+        }
+        return room.playersId;
     }
 }
 
