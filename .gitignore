@@ -30,3 +30,4 @@ Dockerfile
 init-mongo.js
 nginx.conf
 client
+tests
