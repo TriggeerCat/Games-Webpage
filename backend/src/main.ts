@@ -15,7 +15,12 @@ const app = express();
 
 const httpServer = createServer(app);
 
-app.use(cors());
+app.use(
+    cors({
+        origin: envData.FRONTEND_URL,
+        credentials: true
+    })
+);
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
