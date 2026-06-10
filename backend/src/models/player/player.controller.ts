@@ -62,7 +62,7 @@ class PlayerController {
             res.cookie("playerId", data._id, {
                 httpOnly: true,
                 sameSite: "lax",
-                maxAge: 1000 * 60 * 60 * 24
+                maxAge: 1000 * 60 * 60 * 24 * 30
             });
 
             res.status(STATUS_CODE.CREATED).json(data);

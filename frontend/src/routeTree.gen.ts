@@ -9,72 +9,107 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SessionRouteImport } from './routes/session'
-import { Route as LibraryRouteImport } from './routes/library'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GamesIndexRouteImport } from './routes/games/index'
+import { Route as RoomCreateRouteImport } from './routes/room/create'
+import { Route as PlayerUpdateRouteImport } from './routes/player/update'
+import { Route as PlayerCreateRouteImport } from './routes/player/create'
+import { Route as RoomJoinRoomCodeRouteImport } from './routes/room/join.$roomCode'
 
-const SessionRoute = SessionRouteImport.update({
-  id: '/session',
-  path: '/session',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LibraryRoute = LibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesIndexRoute = GamesIndexRouteImport.update({
+  id: '/games/',
+  path: '/games/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomCreateRoute = RoomCreateRouteImport.update({
+  id: '/room/create',
+  path: '/room/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlayerUpdateRoute = PlayerUpdateRouteImport.update({
+  id: '/player/update',
+  path: '/player/update',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlayerCreateRoute = PlayerCreateRouteImport.update({
+  id: '/player/create',
+  path: '/player/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomJoinRoomCodeRoute = RoomJoinRoomCodeRouteImport.update({
+  id: '/room/join/$roomCode',
+  path: '/room/join/$roomCode',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/library': typeof LibraryRoute
-  '/session': typeof SessionRoute
+  '/player/create': typeof PlayerCreateRoute
+  '/player/update': typeof PlayerUpdateRoute
+  '/room/create': typeof RoomCreateRoute
+  '/games': typeof GamesIndexRoute
+  '/room/join/$roomCode': typeof RoomJoinRoomCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/library': typeof LibraryRoute
-  '/session': typeof SessionRoute
+  '/player/create': typeof PlayerCreateRoute
+  '/player/update': typeof PlayerUpdateRoute
+  '/room/create': typeof RoomCreateRoute
+  '/games': typeof GamesIndexRoute
+  '/room/join/$roomCode': typeof RoomJoinRoomCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/library': typeof LibraryRoute
-  '/session': typeof SessionRoute
+  '/player/create': typeof PlayerCreateRoute
+  '/player/update': typeof PlayerUpdateRoute
+  '/room/create': typeof RoomCreateRoute
+  '/games/': typeof GamesIndexRoute
+  '/room/join/$roomCode': typeof RoomJoinRoomCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/library' | '/session'
+  fullPaths:
+    | '/'
+    | '/player/create'
+    | '/player/update'
+    | '/room/create'
+    | '/games'
+    | '/room/join/$roomCode'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/library' | '/session'
-  id: '__root__' | '/' | '/library' | '/session'
+  to:
+    | '/'
+    | '/player/create'
+    | '/player/update'
+    | '/room/create'
+    | '/games'
+    | '/room/join/$roomCode'
+  id:
+    | '__root__'
+    | '/'
+    | '/player/create'
+    | '/player/update'
+    | '/room/create'
+    | '/games/'
+    | '/room/join/$roomCode'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LibraryRoute: typeof LibraryRoute
-  SessionRoute: typeof SessionRoute
+  PlayerCreateRoute: typeof PlayerCreateRoute
+  PlayerUpdateRoute: typeof PlayerUpdateRoute
+  RoomCreateRoute: typeof RoomCreateRoute
+  GamesIndexRoute: typeof GamesIndexRoute
+  RoomJoinRoomCodeRoute: typeof RoomJoinRoomCodeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/session': {
-      id: '/session'
-      path: '/session'
-      fullPath: '/session'
-      preLoaderRoute: typeof SessionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/library': {
-      id: '/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof LibraryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -82,13 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games/': {
+      id: '/games/'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/room/create': {
+      id: '/room/create'
+      path: '/room/create'
+      fullPath: '/room/create'
+      preLoaderRoute: typeof RoomCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/player/update': {
+      id: '/player/update'
+      path: '/player/update'
+      fullPath: '/player/update'
+      preLoaderRoute: typeof PlayerUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/player/create': {
+      id: '/player/create'
+      path: '/player/create'
+      fullPath: '/player/create'
+      preLoaderRoute: typeof PlayerCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/room/join/$roomCode': {
+      id: '/room/join/$roomCode'
+      path: '/room/join/$roomCode'
+      fullPath: '/room/join/$roomCode'
+      preLoaderRoute: typeof RoomJoinRoomCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LibraryRoute: LibraryRoute,
-  SessionRoute: SessionRoute,
+  PlayerCreateRoute: PlayerCreateRoute,
+  PlayerUpdateRoute: PlayerUpdateRoute,
+  RoomCreateRoute: RoomCreateRoute,
+  GamesIndexRoute: GamesIndexRoute,
+  RoomJoinRoomCodeRoute: RoomJoinRoomCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
