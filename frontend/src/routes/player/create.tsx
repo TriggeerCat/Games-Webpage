@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { useState } from "react";
 
+import { useMe } from "../../providers/me.provider";
 import { playerService } from "../../services/player.service";
 
 export const Route = createFileRoute("/player/create")({
@@ -11,18 +12,21 @@ function RouteComponent() {
     const [error, setError] = useState<string>();
     const [nickname, setNickname] = useState("");
     const navigate = useNavigate();
+    const { refreshMe } = useMe();
 
     const delay = -Math.floor(Math.random() * 1000);
 
     const onClickHandler = async () => {
-        const data = await playerService.create(nickname);
-        if (!data) {
+        try {
+            await playerService.create(nickname);
+            await refreshMe();
             setError("");
             await navigate({
                 to: "/"
             });
+        } catch (e) {
+            setError(e as string);
         }
-        if (data?.status === 400) setError(data?.message);
     };
 
     return (

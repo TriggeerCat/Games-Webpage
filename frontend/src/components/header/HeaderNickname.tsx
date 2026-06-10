@@ -1,18 +1,10 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React from "react";
 
-import { playerService } from "../../services/player.service";
-import { IPlayer } from "../../types/player.types";
+import { useMe } from "../../providers/me.provider";
 
 export const HeaderNickname = () => {
-    const [me, setMe] = useState<IPlayer>();
-
-    const refreshMe = async () => {
-        setMe(await playerService.findMe());
-    };
-
-    useEffect(() => {
-        refreshMe().then();
-    }, [me]);
+    const { me } = useMe();
+    console.log(me);
 
     return (
         <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-2">

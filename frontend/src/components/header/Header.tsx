@@ -1,19 +1,11 @@
 ﻿import { Link } from "@tanstack/react-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { playerService } from "../../services/player.service";
+import { useMe } from "../../providers/me.provider";
 import { HeaderNickname } from "./HeaderNickname";
 
 export const Header = () => {
-    const [meCheck, setMeCheck] = useState<boolean>(false);
-
-    const refreshMe = async () => {
-        const data = await playerService.findMe();
-        if (data?.status === 404) setMeCheck(false);
-        else {
-            setMeCheck(true);
-        }
-    };
+    const { me, refreshMe } = useMe();
 
     useEffect(() => {
         refreshMe().then();
@@ -38,7 +30,7 @@ export const Header = () => {
                     </Link>
                 </nav>
 
-                {meCheck ? <HeaderNickname /> : <></>}
+                {me ? <HeaderNickname /> : null}
             </div>
         </header>
     );
