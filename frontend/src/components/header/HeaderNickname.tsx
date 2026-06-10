@@ -4,7 +4,6 @@ import { useMe } from "../../providers/me.provider";
 
 export const HeaderNickname = () => {
     const { me } = useMe();
-    console.log(me);
 
     return (
         <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-2">

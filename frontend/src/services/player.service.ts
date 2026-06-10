@@ -29,34 +29,21 @@ class PlayerService {
     }
 
     public async create(nickname: string) {
-        try {
-            await this.axiosInstance.post("player", {
+        return this.apiRequest<IPlayer>(async () => {
+            const { data } = await this.axiosInstance.post("player", {
                 nickname
             });
-            return;
-        } catch (e) {
-            if (axios.isAxiosError<IApiError>(e)) {
-                const status = e.response?.status;
-                const message = e.response?.data?.message;
-
-                return { status, message };
-            }
-        }
+            return data;
+        });
     }
 
     public async changeNickname(_id: string, nickname: string) {
-        try {
-            return await this.axiosInstance.patch("player", {
+        return this.apiRequest<IPlayer>(async () => {
+            const { data } = await this.axiosInstance.patch("player", {
                 nickname
             });
-        } catch (e) {
-            if (axios.isAxiosError<IApiError>(e)) {
-                const status = e.response?.status;
-                const message = e.response?.data?.message;
-
-                return { status, message };
-            }
-        }
+            return data;
+        });
     }
 }
 
