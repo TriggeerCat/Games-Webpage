@@ -17,15 +17,9 @@ class RoomService {
         return room;
     }
 
-    public async create(
-        hostId: string,
-        maxPlayers: number,
-        debugCode?: string
-    ) {
+    public async create(hostId: string, maxPlayers: number) {
         while (true) {
-            let code;
-            if (debugCode) code = debugCode;
-            else code = generateRoomCode();
+            const code = generateRoomCode();
             if (!(await RoomModel.findOne({ code })))
                 return await RoomModel.create({
                     code,

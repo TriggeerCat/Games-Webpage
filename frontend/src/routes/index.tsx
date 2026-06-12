@@ -1,4 +1,4 @@
-import "../sockets/connection.socket";
+import "../sockets/socket";
 
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";

@@ -1,26 +1,25 @@
-import ReactDOM from 'react-dom/client'
-import {createRouter, RouterProvider} from '@tanstack/react-router'
-import './styles/index.css'
+import "./styles/index.css";
+
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import React from "react";
+import ReactDOM from "react-dom/client";
 
 // Import the generated route tree
-import {routeTree} from './routeTree.gen'
-import React from "react"
+import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
-const router = createRouter({routeTree})
+const router = createRouter({ routeTree });
 
 // Register the router instance for type safety
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
     interface Register {
-        router: typeof router
+        router: typeof router;
     }
 }
 
 // Render the app
-const rootElement = document.getElementById('root')!
+const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
-    const root = ReactDOM.createRoot(rootElement)
-    root.render(
-        <RouterProvider router={router}/>
-    )
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<RouterProvider router={router} />);
 }
