@@ -19,7 +19,6 @@ const MeContext = createContext<ContextType>({
 
 export const MeProvider = ({ children }: PropsType) => {
     const [me, setMe] = useState<IPlayer>();
-    const memo = useMemo(() => ({ me, refreshMe }), []);
 
     const refreshMe = async () => {
         const me = await playerService.findMe();
@@ -27,7 +26,9 @@ export const MeProvider = ({ children }: PropsType) => {
         setMe(me);
     };
 
-    return <MeContext value={memo}>{children}</MeContext>;
+    const memo = useMemo(() => ({ me, refreshMe }), [me]);
+
+    return <MeContext.Provider value={memo}>{children}</MeContext.Provider>;
 };
 
 export const useMe = () => {
