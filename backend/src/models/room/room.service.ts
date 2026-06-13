@@ -1,4 +1,5 @@
-﻿import { STATUS_CODE } from "../../enums/status-code.enum";
+﻿import { GamesEnum } from "../../enums/games.enum";
+import { STATUS_CODE } from "../../enums/status-code.enum";
 import { ApiError } from "../api/api.error";
 import { playerService } from "../player/player.service";
 import { RoomModel } from "./room.model";
@@ -25,7 +26,8 @@ class RoomService {
                     code,
                     hostId,
                     maxPlayers,
-                    playersId: [hostId]
+                    playersId: [hostId],
+                    game: undefined
                 });
         }
     }
@@ -144,6 +146,23 @@ class RoomService {
         return newRoom;
     }
 
+    public async selectGame(code: string, game: GamesEnum | null) {
+        const room = await RoomModel.findOneAndUpdate(
+            { code },
+            { game }
+        ).populate("hostId playersId");
+
+        if (!room) {
+            throw new ApiError(
+                "Room not found (select game)",
+                STATUS_CODE.NOT_FOUND
+            );
+        }
+
+        return room;
+    }
+
+    // helpers
     public async isPlayerHost(code: string, playerId: string) {
         const room = await RoomModel.findOne({ code });
         if (!room) {

@@ -8,7 +8,7 @@ import React, {
 } from "react";
 
 import { roomService } from "../services/room.service";
-import { IRoom } from "../types/room.types";
+import { IRoom } from "../types/room.type";
 
 type PropsType = {
     children: React.ReactNode;

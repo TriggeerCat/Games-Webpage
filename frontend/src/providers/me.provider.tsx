@@ -1,7 +1,7 @@
 ﻿import React, { createContext, useContext, useMemo, useState } from "react";
 
 import { playerService } from "../services/player.service";
-import { IPlayer } from "../types/player.types";
+import { IPlayer } from "../types/player.type";
 
 type PropsType = {
     children: React.ReactNode;

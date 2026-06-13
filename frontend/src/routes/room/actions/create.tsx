@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { useState } from "react";
 
-import { roomService } from "../../services/room.service";
+import { roomService } from "../../../services/room.service";
 
 export const Route = createFileRoute("/room/actions/create")({
     component: RouteComponent

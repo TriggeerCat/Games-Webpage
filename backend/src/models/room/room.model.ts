@@ -1,5 +1,6 @@
 ﻿import { model, Schema } from "mongoose";
 
+import { GAMES_LIST } from "../../enums/games.enum";
 import { IRoom } from "./room.types";
 
 const roomSchema = new Schema(
@@ -10,7 +11,12 @@ const roomSchema = new Schema(
             { type: Schema.Types.ObjectId, ref: "Player", required: true }
         ],
         isGameStillOn: { type: Boolean, default: false },
-        maxPlayers: { type: Number, required: true }
+        maxPlayers: { type: Number, required: true },
+        game: {
+            type: String,
+            enum: Object.values(GAMES_LIST),
+            default: null
+        }
     },
     { versionKey: false }
 );
