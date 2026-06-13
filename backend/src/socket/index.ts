@@ -4,14 +4,8 @@ import { Server as SocketIOServer } from "socket.io";
 
 import envData from "../env/env";
 import { playerService } from "../models/player/player.service";
-import {
-    changeGameStatusHandler,
-    disconnectFromRoomHandler,
-    joinRoomHandler,
-    kickAnotherFromRoomHandler,
-    leaveRoomHandler,
-    transferHostHandler
-} from "./handlers/room.handler";
+import { roomHandler } from "./handlers/room.handler";
+import { ticTacToeHandler } from "./handlers/tic-tac-toe.handler";
 
 export const addSocket = (httpServer: HttpServer) => {
     const io = new SocketIOServer(httpServer, {
@@ -33,11 +27,15 @@ export const addSocket = (httpServer: HttpServer) => {
     });
 
     io.on("connection", (socket) => {
-        joinRoomHandler(io, socket);
-        leaveRoomHandler(io, socket);
-        disconnectFromRoomHandler(io, socket);
-        kickAnotherFromRoomHandler(io, socket);
-        transferHostHandler(io, socket);
-        changeGameStatusHandler(io, socket);
+        roomHandler.joinRoomHandler(io, socket);
+        roomHandler.leaveRoomHandler(io, socket);
+        roomHandler.disconnectFromRoomHandler(io, socket);
+        roomHandler.kickAnotherFromRoomHandler(io, socket);
+        roomHandler.transferHostHandler(io, socket);
+        roomHandler.changeGameStatusHandler(io, socket);
+        roomHandler.selectGameHandler(io, socket);
+
+        ticTacToeHandler.startTheGameHandler(io, socket);
+        ticTacToeHandler.placeSignHandler(io, socket);
     });
 };

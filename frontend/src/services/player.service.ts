@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 
-import { IPlayer } from "../types/player.types";
+import { IPlayer } from "../types/player.type";
 import { apiRequest } from "./api-request.util";
 
 class PlayerService {

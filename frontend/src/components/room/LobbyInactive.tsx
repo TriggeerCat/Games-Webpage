@@ -1,14 +1,24 @@
 ﻿import { useNavigate } from "@tanstack/react-router";
 import React from "react";
 
+import { GAMES } from "../../constants/games.constants";
+import { SOCKET_EVENTS } from "../../constants/socket.constants";
+import { useGame } from "../../providers/game.provider";
+import { useMe } from "../../providers/me.provider";
 import { useRoom } from "../../providers/room.provider";
+import { socket } from "../../sockets/socket";
+import { GameCard } from "./GameCard";
 import { PlayerCard } from "./PlayerCard";
 
-export const Lobby = () => {
+export const LobbyInactive = () => {
+    const { me } = useMe();
     const { room } = useRoom();
+    const { selectedGame } = useGame();
     const navigate = useNavigate();
 
     if (!room) return null;
+
+    const isMeHost = me?._id === room?.hostId._id;
 
     const leaveRoomHandler = async () => {
         await navigate({
@@ -16,10 +26,15 @@ export const Lobby = () => {
         });
     };
 
+    const selectGameHandler = async () => {
+        if (selectedGame) {
+            socket.emit(SOCKET_EVENTS.SELECT_GAME, selectedGame.id);
+        }
+    };
+
     return (
         <div className="mx-auto max-w-[1600px] p-6">
             <div className="grid h-[calc(100vh-120px)] grid-cols-[320px_1fr_320px] grid-rows-[100px_1fr_280px] gap-4">
-                {/* Players */}
                 <section className="row-span-3 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 flex flex-col">
                     <h2 className="mb-4 text-2xl font-bold text-white">
                         Гравці
@@ -39,34 +54,38 @@ export const Lobby = () => {
                     </button>
                 </section>
 
-                {/* Room code */}
                 <section className="flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
                     <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-radial-[circle_at_center] from-[#3cff52] via-[#7182ff] to-[#3cff52] bg-[length:200%] animate-gradient">
                         {room.code || "ERROR"}
                     </h1>
                 </section>
 
-                {/* Games */}
-                <section className="row-span-3 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+                <section className="flex flex-col gap-3 row-span-3 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
                     <h2 className="mb-4 text-2xl font-bold text-white">Ігри</h2>
 
-                    <div className="flex h-7/8 items-center justify-center rounded-2xl border border-dashed border-white/10 text-white/40">
-                        Незабаром
-                    </div>
+                    {GAMES.map((value) => (
+                        <GameCard
+                            thisGame={value}
+                            key={value.id}
+                            canSelectCards={isMeHost}
+                        />
+                    ))}
                 </section>
 
-                {/* Start Game */}
                 <section className="flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8">
-                    <button className="group relative h-full w-full overflow-hidden rounded-3xl bg-gradient-to-br from-[#3cff52] via-[#7182ff] to-[#3cff52] bg-[length:200%] animate-gradient transition hover:scale-[1.01] active:scale-[0.99]">
-                        <div className="absolute inset-[2px] rounded-[22px] bg-black/30 backdrop-blur-xl" />
-
-                        <span className="relative z-10 text-5xl font-extrabold text-white">
-                            Стартувати гру
-                        </span>
-                    </button>
+                    {isMeHost ? (
+                        <button
+                            className="group relative h-full w-full overflow-hidden rounded-3xl bg-gradient-to-br from-[#3cff52] via-[#7182ff] to-[#3cff52] bg-[length:200%] animate-gradient transition hover:scale-[1.01] active:scale-[0.99]"
+                            onClick={selectGameHandler}
+                        >
+                            <div className="absolute inset-[2px] rounded-[22px] bg-black/30 backdrop-blur-xl" />
+                            <span className="relative z-10 text-5xl font-extrabold text-white">
+                                Стартувати гру
+                            </span>
+                        </button>
+                    ) : null}
                 </section>
 
-                {/* Controls */}
                 <section className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
                     <h2 className="mb-4 text-xl font-bold text-white">
                         Вставити щось сюди потім

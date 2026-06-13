@@ -1,11 +1,11 @@
 ﻿import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
+import { SOCKET_EVENTS } from "../constants/socket.constants";
 import { useMe } from "../providers/me.provider";
 import { useRoom } from "../providers/room.provider";
-import { IRoom } from "../types/room.types";
+import { IRoom } from "../types/room.type";
 import { socket } from "./socket";
-import { SOCKET_EVENTS } from "./socket.constants";
 
 export const useRoomSocket = () => {
     const { room, setRoom } = useRoom();
@@ -23,6 +23,15 @@ export const useRoomSocket = () => {
         socket.on(SOCKET_EVENTS.KICKED_OUT, async (id: string) => {
             if (me?._id === id) await navigate({ to: "/" });
         });
+
+        socket.on(
+            SOCKET_EVENTS.START_MOVING,
+            async (roomCode: string, gameId: string) => {
+                await navigate({
+                    to: `/room/room/${roomCode}/game/${gameId}`
+                });
+            }
+        );
 
         return () => {
             socket.off(SOCKET_EVENTS.UPDATE_ROOM, (room: IRoom) => {

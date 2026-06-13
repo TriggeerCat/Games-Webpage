@@ -1,103 +1,129 @@
 ﻿import { Server, Socket } from "socket.io";
 
+import { GamesEnum } from "../../enums/games.enum";
 import { roomService } from "../../models/room/room.service";
 import { onSafe } from "../on-save.wrapper";
 
-export const joinRoomHandler = (io: Server, socket: Socket) => {
-    onSafe(socket, "join-room", async (roomCode: string) => {
-        const { playerId } = socket.data.socketDataState;
-        await roomService.findOneByCode(roomCode);
-        socket.join(roomCode);
-        const room = await roomService.addPlayer(roomCode, playerId);
-        socket.data.socketDataState = { playerId, roomCode };
-        io.to(roomCode).emit("update-room", room, "join room");
-    });
-};
+class RoomHandler {
+    private readonly removePlayerFromRoom = async (
+        io: Server,
+        socket: Socket
+    ) => {
+        const { playerId, roomCode } = socket.data.socketDataState;
+        if (!playerId || !roomCode) return;
+        const room = await roomService.findOneByCode(roomCode);
 
-const removePlayerFromRoom = async (io: Server, socket: Socket) => {
-    const { playerId, roomCode } = socket.data.socketDataState;
-    if (!playerId || !roomCode) return;
-    const room = await roomService.findOneByCode(roomCode);
+        if (!(await roomService.isPlayerHost(roomCode, playerId))) {
+            const newRoom = await roomService.deletePlayer(roomCode, playerId);
+            socket.leave(roomCode);
+            io.to(roomCode).emit("update-room", newRoom, "guy isn't host");
+            return;
+        }
 
-    if (!(await roomService.isPlayerHost(roomCode, playerId))) {
-        const newRoom = await roomService.deletePlayer(roomCode, playerId);
+        // If host disconnects from this particular room then not delete the host and not delete the room
+        if (roomCode === "ELI4W0") {
+            io.to(roomCode).emit("update-room", room, "room is special");
+            return;
+        }
+
+        if (room.playersId.length > 1) {
+            const otherPlayersList =
+                await roomService.getPlayersIdList(roomCode);
+            const hostIndex = otherPlayersList.indexOf(playerId);
+            otherPlayersList.splice(hostIndex, 1);
+
+            const num = Math.floor(Math.random() * otherPlayersList.length);
+            const newHostId = otherPlayersList[num];
+            await roomService.transferHost(roomCode, newHostId);
+            const newRoom = await roomService.deletePlayer(roomCode, playerId);
+            socket.leave(roomCode);
+            io.to(roomCode).emit(
+                "update-room",
+                newRoom,
+                "transfer random host"
+            );
+            return;
+        }
+
         socket.leave(roomCode);
-        io.to(roomCode).emit("update-room", newRoom, "guy isn't host");
-        return;
-    }
+        await roomService.delete(roomCode);
+    };
 
-    // If host disconnects from this particular room then not delete the host and not delete the room
-    if (roomCode === "ELI4W0") {
-        io.to(roomCode).emit("update-room", room, "room is special");
-        return;
-    }
+    public joinRoomHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "join-room", async (roomCode: string) => {
+            const { playerId } = socket.data.socketDataState;
+            await roomService.findOneByCode(roomCode);
+            socket.join(roomCode);
+            const room = await roomService.addPlayer(roomCode, playerId);
+            socket.data.socketDataState = { playerId, roomCode };
+            io.to(roomCode).emit("update-room", room, "join room");
+        });
+    };
 
-    if (room.playersId.length > 1) {
-        const otherPlayersList = await roomService.getPlayersIdList(roomCode);
-        const hostIndex = otherPlayersList.indexOf(playerId);
-        otherPlayersList.splice(hostIndex, 1);
+    public leaveRoomHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "leave-room", async () => {
+            await this.removePlayerFromRoom(io, socket);
+        });
+    };
 
-        const num = Math.floor(Math.random() * otherPlayersList.length);
-        const newHostId = otherPlayersList[num];
-        await roomService.transferHost(roomCode, newHostId);
-        const newRoom = await roomService.deletePlayer(roomCode, playerId);
-        socket.leave(roomCode);
-        io.to(roomCode).emit("update-room", newRoom, "transfer random host");
-        return;
-    }
+    public disconnectFromRoomHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "disconnect", async () => {
+            await this.removePlayerFromRoom(io, socket);
+        });
+    };
 
-    socket.leave(roomCode);
-    await roomService.delete(roomCode);
-};
+    public kickAnotherFromRoomHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "kick-player", async (badPlayerId: string) => {
+            const { playerId, roomCode } = socket.data.socketDataState;
+            if (!playerId || !roomCode) return;
 
-export const leaveRoomHandler = (io: Server, socket: Socket) => {
-    onSafe(socket, "leave-room", async () => {
-        await removePlayerFromRoom(io, socket);
-    });
-};
+            if (!(await roomService.isPlayerHost(roomCode, playerId)))
+                throw new Error("Player is not host");
 
-export const disconnectFromRoomHandler = (io: Server, socket: Socket) => {
-    onSafe(socket, "disconnect", async () => {
-        await removePlayerFromRoom(io, socket);
-    });
-};
+            const room = await roomService.deletePlayer(roomCode, badPlayerId);
 
-export const kickAnotherFromRoomHandler = (io: Server, socket: Socket) => {
-    onSafe(socket, "kick-player", async (badPlayerId: string) => {
-        const { playerId, roomCode } = socket.data.socketDataState;
-        if (!playerId || !roomCode) return;
+            io.to(roomCode).emit("kicked-out", badPlayerId);
+            io.to(roomCode).emit("update-room", room, "kick guy");
+        });
+    };
 
-        if (!(await roomService.isPlayerHost(roomCode, playerId)))
-            throw new Error("Player is not host");
+    public transferHostHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "transfer-host", async (newHostId: string) => {
+            const { playerId, roomCode } = socket.data.socketDataState;
+            if (!playerId || !roomCode) return;
 
-        const room = await roomService.deletePlayer(roomCode, badPlayerId);
+            if (!(await roomService.isPlayerHost(roomCode, playerId)))
+                throw new Error("Player is not host");
 
-        io.to(roomCode).emit("kicked-out", badPlayerId);
-        io.to(roomCode).emit("update-room", room, "kick guy");
-    });
-};
+            await roomService.transferHost(roomCode, newHostId);
+            const newRoom = await roomService.findOneByCode(roomCode);
+            io.to(roomCode).emit("update-room", newRoom, "transfer host");
+        });
+    };
 
-export const transferHostHandler = (io: Server, socket: Socket) => {
-    onSafe(socket, "transfer-host", async (newHostId: string) => {
-        const { playerId, roomCode } = socket.data.socketDataState;
-        if (!playerId || !roomCode) return;
+    public changeGameStatusHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "change-game-status", async () => {
+            const { playerId, roomCode } = socket.data.socketDataState;
+            if (!playerId || !roomCode) return;
+            if (!(await roomService.isPlayerHost(roomCode, playerId)))
+                throw new Error("Player is not host");
+            const room = await roomService.changeGameStatus(roomCode);
+            io.to(roomCode).emit("update-room", room, "change status");
+        });
+    };
 
-        if (!(await roomService.isPlayerHost(roomCode, playerId)))
-            throw new Error("Player is not host");
+    public selectGameHandler = (io: Server, socket: Socket) => {
+        onSafe(socket, "select-game", async (gameId: GamesEnum | null) => {
+            const { playerId, roomCode } = socket.data.socketDataState;
+            if (!playerId || !roomCode) return;
+            if (!(await roomService.isPlayerHost(roomCode, playerId)))
+                throw new Error("Player is not host");
+            const room = await roomService.selectGame(roomCode, gameId);
 
-        await roomService.transferHost(roomCode, newHostId);
-        const newRoom = await roomService.findOneByCode(roomCode);
-        io.to(roomCode).emit("update-room", newRoom, "transfer host");
-    });
-};
+            io.to(roomCode).emit("update-room", room, "select game");
+            io.to(roomCode).emit("start-moving", roomCode, gameId);
+        });
+    };
+}
 
-export const changeGameStatusHandler = (io: Server, socket: Socket) => {
-    onSafe(socket, "change-game-status", async () => {
-        const { playerId, roomCode } = socket.data.socketDataState;
-        if (!playerId || !roomCode) return;
-        if (!(await roomService.isPlayerHost(roomCode, playerId)))
-            throw new Error("Player is not host");
-        const room = await roomService.changeGameStatus(roomCode);
-        io.to(roomCode).emit("update-room", room, "change status");
-    });
-};
+export const roomHandler = new RoomHandler();

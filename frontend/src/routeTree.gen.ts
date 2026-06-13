@@ -9,14 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RoomRouteRouteImport } from './routes/room/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
 import { Route as PlayerUpdateRouteImport } from './routes/player/update'
 import { Route as PlayerCreateRouteImport } from './routes/player/create'
-import { Route as RoomRoomRoomCodeRouteImport } from './routes/room/room.$roomCode'
-import { Route as RoomActionsJoinRouteImport } from './routes/room/actions.join'
-import { Route as RoomActionsCreateRouteImport } from './routes/room/actions.create'
+import { Route as RoomActionsJoinRouteImport } from './routes/room/actions/join'
+import { Route as RoomActionsCreateRouteImport } from './routes/room/actions/create'
+import { Route as RoomRoomRoomCodeRouteRouteImport } from './routes/room/room.$roomCode/route'
+import { Route as RoomRoomRoomCodeIndexRouteImport } from './routes/room/room.$roomCode/index'
+import { Route as RoomRoomRoomCodeGameRouteRouteImport } from './routes/room/room.$roomCode/game/route'
+import { Route as RoomRoomRoomCodeGameTicTacToeRouteRouteImport } from './routes/room/room.$roomCode/game/tic-tac-toe/route'
+import { Route as RoomRoomRoomCodeGameTicTacToeIndexRouteImport } from './routes/room/room.$roomCode/game/tic-tac-toe/index'
 
+const RoomRouteRoute = RoomRouteRouteImport.update({
+  id: '/room',
+  path: '/room',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,92 +47,146 @@ const PlayerCreateRoute = PlayerCreateRouteImport.update({
   path: '/player/create',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RoomRoomRoomCodeRoute = RoomRoomRoomCodeRouteImport.update({
-  id: '/room/room/$roomCode',
-  path: '/room/room/$roomCode',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RoomActionsJoinRoute = RoomActionsJoinRouteImport.update({
-  id: '/room/actions/join',
-  path: '/room/actions/join',
-  getParentRoute: () => rootRouteImport,
+  id: '/actions/join',
+  path: '/actions/join',
+  getParentRoute: () => RoomRouteRoute,
 } as any)
 const RoomActionsCreateRoute = RoomActionsCreateRouteImport.update({
-  id: '/room/actions/create',
-  path: '/room/actions/create',
-  getParentRoute: () => rootRouteImport,
+  id: '/actions/create',
+  path: '/actions/create',
+  getParentRoute: () => RoomRouteRoute,
 } as any)
+const RoomRoomRoomCodeRouteRoute = RoomRoomRoomCodeRouteRouteImport.update({
+  id: '/room/$roomCode',
+  path: '/room/$roomCode',
+  getParentRoute: () => RoomRouteRoute,
+} as any)
+const RoomRoomRoomCodeIndexRoute = RoomRoomRoomCodeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RoomRoomRoomCodeRouteRoute,
+} as any)
+const RoomRoomRoomCodeGameRouteRoute =
+  RoomRoomRoomCodeGameRouteRouteImport.update({
+    id: '/game',
+    path: '/game',
+    getParentRoute: () => RoomRoomRoomCodeRouteRoute,
+  } as any)
+const RoomRoomRoomCodeGameTicTacToeRouteRoute =
+  RoomRoomRoomCodeGameTicTacToeRouteRouteImport.update({
+    id: '/tic-tac-toe',
+    path: '/tic-tac-toe',
+    getParentRoute: () => RoomRoomRoomCodeGameRouteRoute,
+  } as any)
+const RoomRoomRoomCodeGameTicTacToeIndexRoute =
+  RoomRoomRoomCodeGameTicTacToeIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => RoomRoomRoomCodeGameTicTacToeRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/room': typeof RoomRouteRouteWithChildren
   '/player/create': typeof PlayerCreateRoute
   '/player/update': typeof PlayerUpdateRoute
   '/games': typeof GamesIndexRoute
+  '/room/room/$roomCode': typeof RoomRoomRoomCodeRouteRouteWithChildren
   '/room/actions/create': typeof RoomActionsCreateRoute
   '/room/actions/join': typeof RoomActionsJoinRoute
-  '/room/room/$roomCode': typeof RoomRoomRoomCodeRoute
+  '/room/room/$roomCode/game': typeof RoomRoomRoomCodeGameRouteRouteWithChildren
+  '/room/room/$roomCode/': typeof RoomRoomRoomCodeIndexRoute
+  '/room/room/$roomCode/game/tic-tac-toe': typeof RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren
+  '/room/room/$roomCode/game/tic-tac-toe/': typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/room': typeof RoomRouteRouteWithChildren
   '/player/create': typeof PlayerCreateRoute
   '/player/update': typeof PlayerUpdateRoute
   '/games': typeof GamesIndexRoute
   '/room/actions/create': typeof RoomActionsCreateRoute
   '/room/actions/join': typeof RoomActionsJoinRoute
-  '/room/room/$roomCode': typeof RoomRoomRoomCodeRoute
+  '/room/room/$roomCode/game': typeof RoomRoomRoomCodeGameRouteRouteWithChildren
+  '/room/room/$roomCode': typeof RoomRoomRoomCodeIndexRoute
+  '/room/room/$roomCode/game/tic-tac-toe': typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/room': typeof RoomRouteRouteWithChildren
   '/player/create': typeof PlayerCreateRoute
   '/player/update': typeof PlayerUpdateRoute
   '/games/': typeof GamesIndexRoute
+  '/room/room/$roomCode': typeof RoomRoomRoomCodeRouteRouteWithChildren
   '/room/actions/create': typeof RoomActionsCreateRoute
   '/room/actions/join': typeof RoomActionsJoinRoute
-  '/room/room/$roomCode': typeof RoomRoomRoomCodeRoute
+  '/room/room/$roomCode/game': typeof RoomRoomRoomCodeGameRouteRouteWithChildren
+  '/room/room/$roomCode/': typeof RoomRoomRoomCodeIndexRoute
+  '/room/room/$roomCode/game/tic-tac-toe': typeof RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren
+  '/room/room/$roomCode/game/tic-tac-toe/': typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/room'
     | '/player/create'
     | '/player/update'
     | '/games'
+    | '/room/room/$roomCode'
     | '/room/actions/create'
     | '/room/actions/join'
-    | '/room/room/$roomCode'
+    | '/room/room/$roomCode/game'
+    | '/room/room/$roomCode/'
+    | '/room/room/$roomCode/game/tic-tac-toe'
+    | '/room/room/$roomCode/game/tic-tac-toe/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/room'
     | '/player/create'
     | '/player/update'
     | '/games'
     | '/room/actions/create'
     | '/room/actions/join'
+    | '/room/room/$roomCode/game'
     | '/room/room/$roomCode'
+    | '/room/room/$roomCode/game/tic-tac-toe'
   id:
     | '__root__'
     | '/'
+    | '/room'
     | '/player/create'
     | '/player/update'
     | '/games/'
+    | '/room/room/$roomCode'
     | '/room/actions/create'
     | '/room/actions/join'
-    | '/room/room/$roomCode'
+    | '/room/room/$roomCode/game'
+    | '/room/room/$roomCode/'
+    | '/room/room/$roomCode/game/tic-tac-toe'
+    | '/room/room/$roomCode/game/tic-tac-toe/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RoomRouteRoute: typeof RoomRouteRouteWithChildren
   PlayerCreateRoute: typeof PlayerCreateRoute
   PlayerUpdateRoute: typeof PlayerUpdateRoute
   GamesIndexRoute: typeof GamesIndexRoute
-  RoomActionsCreateRoute: typeof RoomActionsCreateRoute
-  RoomActionsJoinRoute: typeof RoomActionsJoinRoute
-  RoomRoomRoomCodeRoute: typeof RoomRoomRoomCodeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/room': {
+      id: '/room'
+      path: '/room'
+      fullPath: '/room'
+      preLoaderRoute: typeof RoomRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -151,38 +215,125 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/room/room/$roomCode': {
-      id: '/room/room/$roomCode'
-      path: '/room/room/$roomCode'
-      fullPath: '/room/room/$roomCode'
-      preLoaderRoute: typeof RoomRoomRoomCodeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/room/actions/join': {
       id: '/room/actions/join'
-      path: '/room/actions/join'
+      path: '/actions/join'
       fullPath: '/room/actions/join'
       preLoaderRoute: typeof RoomActionsJoinRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof RoomRouteRoute
     }
     '/room/actions/create': {
       id: '/room/actions/create'
-      path: '/room/actions/create'
+      path: '/actions/create'
       fullPath: '/room/actions/create'
       preLoaderRoute: typeof RoomActionsCreateRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof RoomRouteRoute
+    }
+    '/room/room/$roomCode': {
+      id: '/room/room/$roomCode'
+      path: '/room/$roomCode'
+      fullPath: '/room/room/$roomCode'
+      preLoaderRoute: typeof RoomRoomRoomCodeRouteRouteImport
+      parentRoute: typeof RoomRouteRoute
+    }
+    '/room/room/$roomCode/': {
+      id: '/room/room/$roomCode/'
+      path: '/'
+      fullPath: '/room/room/$roomCode/'
+      preLoaderRoute: typeof RoomRoomRoomCodeIndexRouteImport
+      parentRoute: typeof RoomRoomRoomCodeRouteRoute
+    }
+    '/room/room/$roomCode/game': {
+      id: '/room/room/$roomCode/game'
+      path: '/game'
+      fullPath: '/room/room/$roomCode/game'
+      preLoaderRoute: typeof RoomRoomRoomCodeGameRouteRouteImport
+      parentRoute: typeof RoomRoomRoomCodeRouteRoute
+    }
+    '/room/room/$roomCode/game/tic-tac-toe': {
+      id: '/room/room/$roomCode/game/tic-tac-toe'
+      path: '/tic-tac-toe'
+      fullPath: '/room/room/$roomCode/game/tic-tac-toe'
+      preLoaderRoute: typeof RoomRoomRoomCodeGameTicTacToeRouteRouteImport
+      parentRoute: typeof RoomRoomRoomCodeGameRouteRoute
+    }
+    '/room/room/$roomCode/game/tic-tac-toe/': {
+      id: '/room/room/$roomCode/game/tic-tac-toe/'
+      path: '/'
+      fullPath: '/room/room/$roomCode/game/tic-tac-toe/'
+      preLoaderRoute: typeof RoomRoomRoomCodeGameTicTacToeIndexRouteImport
+      parentRoute: typeof RoomRoomRoomCodeGameTicTacToeRouteRoute
     }
   }
 }
 
+interface RoomRoomRoomCodeGameTicTacToeRouteRouteChildren {
+  RoomRoomRoomCodeGameTicTacToeIndexRoute: typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
+}
+
+const RoomRoomRoomCodeGameTicTacToeRouteRouteChildren: RoomRoomRoomCodeGameTicTacToeRouteRouteChildren =
+  {
+    RoomRoomRoomCodeGameTicTacToeIndexRoute:
+      RoomRoomRoomCodeGameTicTacToeIndexRoute,
+  }
+
+const RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren =
+  RoomRoomRoomCodeGameTicTacToeRouteRoute._addFileChildren(
+    RoomRoomRoomCodeGameTicTacToeRouteRouteChildren,
+  )
+
+interface RoomRoomRoomCodeGameRouteRouteChildren {
+  RoomRoomRoomCodeGameTicTacToeRouteRoute: typeof RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren
+}
+
+const RoomRoomRoomCodeGameRouteRouteChildren: RoomRoomRoomCodeGameRouteRouteChildren =
+  {
+    RoomRoomRoomCodeGameTicTacToeRouteRoute:
+      RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren,
+  }
+
+const RoomRoomRoomCodeGameRouteRouteWithChildren =
+  RoomRoomRoomCodeGameRouteRoute._addFileChildren(
+    RoomRoomRoomCodeGameRouteRouteChildren,
+  )
+
+interface RoomRoomRoomCodeRouteRouteChildren {
+  RoomRoomRoomCodeGameRouteRoute: typeof RoomRoomRoomCodeGameRouteRouteWithChildren
+  RoomRoomRoomCodeIndexRoute: typeof RoomRoomRoomCodeIndexRoute
+}
+
+const RoomRoomRoomCodeRouteRouteChildren: RoomRoomRoomCodeRouteRouteChildren = {
+  RoomRoomRoomCodeGameRouteRoute: RoomRoomRoomCodeGameRouteRouteWithChildren,
+  RoomRoomRoomCodeIndexRoute: RoomRoomRoomCodeIndexRoute,
+}
+
+const RoomRoomRoomCodeRouteRouteWithChildren =
+  RoomRoomRoomCodeRouteRoute._addFileChildren(
+    RoomRoomRoomCodeRouteRouteChildren,
+  )
+
+interface RoomRouteRouteChildren {
+  RoomRoomRoomCodeRouteRoute: typeof RoomRoomRoomCodeRouteRouteWithChildren
+  RoomActionsCreateRoute: typeof RoomActionsCreateRoute
+  RoomActionsJoinRoute: typeof RoomActionsJoinRoute
+}
+
+const RoomRouteRouteChildren: RoomRouteRouteChildren = {
+  RoomRoomRoomCodeRouteRoute: RoomRoomRoomCodeRouteRouteWithChildren,
+  RoomActionsCreateRoute: RoomActionsCreateRoute,
+  RoomActionsJoinRoute: RoomActionsJoinRoute,
+}
+
+const RoomRouteRouteWithChildren = RoomRouteRoute._addFileChildren(
+  RoomRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RoomRouteRoute: RoomRouteRouteWithChildren,
   PlayerCreateRoute: PlayerCreateRoute,
   PlayerUpdateRoute: PlayerUpdateRoute,
   GamesIndexRoute: GamesIndexRoute,
-  RoomActionsCreateRoute: RoomActionsCreateRoute,
-  RoomActionsJoinRoute: RoomActionsJoinRoute,
-  RoomRoomRoomCodeRoute: RoomRoomRoomCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
