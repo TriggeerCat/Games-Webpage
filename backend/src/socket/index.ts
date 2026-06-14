@@ -6,6 +6,7 @@ import envData from "../env/env";
 import { playerService } from "../models/player/player.service";
 import { roomHandler } from "./handlers/room.handler";
 import { ticTacToeHandler } from "./handlers/tic-tac-toe.handler";
+import { vllHandler } from "./handlers/very-loud-librarians.handler";
 
 export const addSocket = (httpServer: HttpServer) => {
     const io = new SocketIOServer(httpServer, {
@@ -37,5 +38,8 @@ export const addSocket = (httpServer: HttpServer) => {
 
         ticTacToeHandler.startTheGameHandler(io, socket);
         ticTacToeHandler.placeSignHandler(io, socket);
+
+        vllHandler.startRoundHandler(io, socket);
+        vllHandler.scorePointHandler(io, socket);
     });
 };

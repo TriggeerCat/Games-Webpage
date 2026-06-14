@@ -12,5 +12,11 @@
     TTT_START_GAME: "ttt:start-game",
     TTT_PLACE_SIGN: "ttt:place-sign",
     // TTT frontend
-    TTT_UPDATE_GAME: "ttt:update-game"
+    TTT_UPDATE_GAME: "ttt:update-game",
+
+    // VLL backend
+    VLL_START_ROUND: "vll:start-round",
+    VLL_SCORE_POINT: "vll:score-point",
+    // VLL frontend
+    VLL_UPDATE_GAME: "vll:update-game"
 } as const;
