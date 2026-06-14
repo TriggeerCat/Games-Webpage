@@ -1,5 +1,6 @@
 ﻿import { Server, Socket } from "socket.io";
 
+import { TIC_TAC_TOE_SIGNS, TicTacToeSigns } from "../../enums/ttt-signs.enum";
 import { TTTBoardState } from "../../models/games/tic-tac-toe/ttt.state";
 import { onSafe } from "../on-save.wrapper";
 
@@ -14,14 +15,14 @@ class TicTacToeHandler {
         return this.games.get(roomCode)!;
     }
 
-    public startTheGameHandler = (io: Server, socket: Socket) => {
+    public startTheGameHandler(io: Server, socket: Socket) {
         onSafe(socket, "ttt:start-game", (roomCode: string) => {
             const game = this.getGame(roomCode);
             io.to(roomCode).emit("ttt:update-game", game.getState());
         });
-    };
+    }
 
-    public placeSignHandler = (io: Server, socket: Socket) => {
+    public placeSignHandler(io: Server, socket: Socket) {
         onSafe(
             socket,
             "ttt:place-sign",
@@ -32,15 +33,19 @@ class TicTacToeHandler {
             }: {
                 roomCode: string;
                 position: number;
-                sign: "X" | "O" | null;
+                sign: TicTacToeSigns | null;
             }) => {
-                if (!sign) return;
+                if (
+                    sign !== TIC_TAC_TOE_SIGNS.X &&
+                    sign !== TIC_TAC_TOE_SIGNS.O
+                )
+                    return;
                 const game = this.getGame(roomCode);
                 game.placeSign(position, sign);
                 io.to(roomCode).emit("ttt:update-game", game.getState());
             }
         );
-    };
+    }
 }
 
 export const ticTacToeHandler = new TicTacToeHandler();

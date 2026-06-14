@@ -19,13 +19,13 @@ function RouteComponent() {
     if (room === undefined)
         return <div className="flex justify-center">Loading...</div>;
 
-    return room ? (
-        <GameProvider>
-            <SocketProvider>
-                <Outlet />
-            </SocketProvider>
-        </GameProvider>
-    ) : (
-        <ErrorPage />
-    );
+    if (room)
+        return (
+            <GameProvider>
+                <SocketProvider>
+                    <Outlet />
+                </SocketProvider>
+            </GameProvider>
+        );
+    else return <ErrorPage />;
 }

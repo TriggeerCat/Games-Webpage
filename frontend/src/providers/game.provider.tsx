@@ -35,11 +35,5 @@ export const GameProvider = ({ children }: PropsType) => {
 };
 
 export const useGame = () => {
-    const context = useContext(GameContext);
-
-    if (!context) {
-        throw new Error("useMe hook must be used within a MeProvider");
-    }
-
-    return context;
+    return useContext(GameContext);
 };

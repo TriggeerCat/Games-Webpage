@@ -33,13 +33,5 @@ export const TicTakToeProvider = ({ children }: PropsType) => {
 };
 
 export const useTicTacToe = () => {
-    const context = useContext(TicTakToeContext);
-
-    if (!context) {
-        throw new Error(
-            "useTicTacToe hook must be used within a TicTacToeProvider"
-        );
-    }
-
-    return context;
+    return useContext(TicTakToeContext);
 };

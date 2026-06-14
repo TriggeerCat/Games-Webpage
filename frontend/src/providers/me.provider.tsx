@@ -32,11 +32,5 @@ export const MeProvider = ({ children }: PropsType) => {
 };
 
 export const useMe = () => {
-    const context = useContext(MeContext);
-
-    if (!context) {
-        throw new Error("useMe hook must be used within a MeProvider");
-    }
-
-    return context;
+    return useContext(MeContext);
 };

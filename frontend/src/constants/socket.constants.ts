@@ -1,6 +1,7 @@
 ﻿export const SOCKET_EVENTS = {
     JOIN_ROOM: "join-room",
     UPDATE_ROOM: "update-room",
+    DISCONNECT: "disconnect",
     CHANGE_GAME_STATUS: "change-game-status",
     SELECT_GAME: "select-game",
     SERVER_ERROR: "server-error",

@@ -50,11 +50,5 @@ export const RoomProvider = ({ children }: PropsType) => {
 };
 
 export const useRoom = () => {
-    const context = useContext(RoomContext);
-
-    if (!context) {
-        throw new Error("useRoom hook must be used within a RoomProvider");
-    }
-
-    return context;
+    return useContext(RoomContext);
 };

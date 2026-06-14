@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
 import { SOCKET_EVENTS } from "../../../../../constants/socket.constants";
+import { TIC_TAC_TOE_SIGNS } from "../../../../../enum/ttt-signs.enum";
 import { useMe } from "../../../../../providers/me.provider";
 import { useRoom } from "../../../../../providers/room.provider";
 import { useTicTacToe } from "../../../../../providers/ttt.provider";
@@ -23,12 +24,9 @@ function RouteComponent() {
     if (!room || !me || !TTT) return null;
 
     const playersList = room.playersId;
-    const sign =
-        me._id === playersList[0]._id
-            ? "X"
-            : me._id === playersList[1]._id
-              ? "O"
-              : null;
+    let sign: string | null = null;
+    if (me._id === playersList[0]._id) sign = "X";
+    if (me._id === playersList[1]._id) sign = "O";
 
     const isThisMyTurn = TTT.currentTurn === sign;
 
@@ -75,13 +73,13 @@ function RouteComponent() {
                             className="aspect-square rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl text-5xl font-black transition hover:bg-white/10 hover:scale-[1.03] active:scale-[0.97]"
                             onClick={onClickHandler(index)}
                         >
-                            {cell === "X" && (
+                            {cell === TIC_TAC_TOE_SIGNS.X ? (
                                 <span className="text-[#3cff52]">X</span>
-                            )}
+                            ) : null}
 
-                            {cell === "O" && (
+                            {cell === TIC_TAC_TOE_SIGNS.O ? (
                                 <span className="text-[#7182ff]">O</span>
-                            )}
+                            ) : null}
                         </button>
                     ))}
                 </div>

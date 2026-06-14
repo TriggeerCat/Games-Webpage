@@ -18,7 +18,7 @@ export const LobbyInactive = () => {
 
     if (!room) return null;
 
-    const isMeHost = me?._id === room?.hostId._id;
+    const isMeHost = me?._id === room.hostId._id;
 
     const leaveRoomHandler = async () => {
         await navigate({

@@ -24,11 +24,16 @@ export const useRoomSocket = () => {
             if (me?._id === id) await navigate({ to: "/" });
         });
 
+        socket.on(SOCKET_EVENTS.DISCONNECT, async () => {
+            await navigate({ to: "/" });
+        });
+
         socket.on(
             SOCKET_EVENTS.START_MOVING,
             async (roomCode: string, gameId: string) => {
                 await navigate({
-                    to: `/room/room/${roomCode}/game/${gameId}`
+                    to: "/room/room/$roomCode/game" + `/${gameId}`,
+                    params: { roomCode }
                 });
             }
         );
@@ -40,6 +45,10 @@ export const useRoomSocket = () => {
 
             socket.off(SOCKET_EVENTS.KICKED_OUT, async (id: string) => {
                 if (me?._id === id) await navigate({ to: "/" });
+            });
+
+            socket.off(SOCKET_EVENTS.DISCONNECT, async () => {
+                await navigate({ to: "/" });
             });
         };
     }, [roomCode]);

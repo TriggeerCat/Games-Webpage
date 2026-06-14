@@ -16,6 +16,12 @@ export const GameCard: FC<PropsType> = ({ thisGame, canSelectCards }) => {
         if (canSelectCards) selectGame(thisGame.id);
     };
 
+    let maxPlayers: string | undefined = thisGame?.maxPlayers?.toString();
+    if (maxPlayers) {
+        if (thisGame.maxPlayers === thisGame.minPlayers) maxPlayers = "";
+        else maxPlayers = `-${maxPlayers}`;
+    } else maxPlayers = "+";
+
     return (
         <button
             className={`group overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-[#7182ff]/40 hover:bg-white/10 hover:scale-[1.02] cursor-pointer
@@ -49,10 +55,8 @@ export const GameCard: FC<PropsType> = ({ thisGame, canSelectCards }) => {
 
                 <div className="mt-3 flex items-center justify-between">
                     <span className="rounded-xl bg-black/20 px-3 py-1 text-sm text-white/70">
-                        {thisGame.playerCount}
+                        {`Кількість гравців: ${thisGame.minPlayers}${maxPlayers}`}
                     </span>
-
-                    <span className="text-xs text-white/30">{thisGame.id}</span>
                 </div>
             </div>
         </button>
