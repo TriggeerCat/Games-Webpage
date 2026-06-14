@@ -1,4 +1,4 @@
-﻿import { IPlayer } from "./player.types";
+﻿import { IPlayer } from "./player.type";
 
 export interface IRoom {
     code: string;

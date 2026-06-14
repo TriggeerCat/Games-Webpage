@@ -32,12 +32,16 @@ function RouteComponent() {
             <div className="w-full max-w-xl rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8">
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-white/60">
+                        <label
+                            htmlFor="code"
+                            className="text-sm font-medium text-white/60"
+                        >
                             Код
                         </label>
 
                         <input
                             type="text"
+                            id="code"
                             value={code}
                             onChange={(e) => {
                                 setCode(e.target.value);

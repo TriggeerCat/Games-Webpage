@@ -3,7 +3,7 @@
 import { useMe } from "../../providers/me.provider";
 import { useRoom } from "../../providers/room.provider";
 import { socket } from "../../sockets/socket";
-import { IPlayer } from "../../types/player.types";
+import { IPlayer } from "../../types/player.type";
 
 type PropsType = {
     player: IPlayer;

@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 
-import { IRoom } from "../types/room.types";
+import { IRoom } from "../types/room.type";
 import { apiRequest } from "./api-request.util";
 
 class RoomService {

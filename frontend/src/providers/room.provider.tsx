@@ -8,7 +8,7 @@ import React, {
 } from "react";
 
 import { roomService } from "../services/room.service";
-import { IRoom } from "../types/room.types";
+import { IRoom } from "../types/room.type";
 
 type PropsType = {
     children: React.ReactNode;
@@ -50,11 +50,5 @@ export const RoomProvider = ({ children }: PropsType) => {
 };
 
 export const useRoom = () => {
-    const context = useContext(RoomContext);
-
-    if (!context) {
-        throw new Error("useRoom hook must be used within a RoomProvider");
-    }
-
-    return context;
+    return useContext(RoomContext);
 };

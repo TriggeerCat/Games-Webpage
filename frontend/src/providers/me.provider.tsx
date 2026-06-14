@@ -1,7 +1,7 @@
 ﻿import React, { createContext, useContext, useMemo, useState } from "react";
 
 import { playerService } from "../services/player.service";
-import { IPlayer } from "../types/player.types";
+import { IPlayer } from "../types/player.type";
 
 type PropsType = {
     children: React.ReactNode;
@@ -32,11 +32,5 @@ export const MeProvider = ({ children }: PropsType) => {
 };
 
 export const useMe = () => {
-    const context = useContext(MeContext);
-
-    if (!context) {
-        throw new Error("useMe hook must be used within a MeProvider");
-    }
-
-    return context;
+    return useContext(MeContext);
 };
