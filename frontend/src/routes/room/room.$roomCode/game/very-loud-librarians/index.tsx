@@ -32,7 +32,6 @@ function RouteComponent() {
     };
 
     const newRoundHandler = () => {
-        console.log(vll.currentLetter);
         if (!vll.currentLetter[0])
             socket.emit(SOCKET_EVENTS.VLL_START_ROUND, room.code);
     };
@@ -84,7 +83,7 @@ function RouteComponent() {
                     <div className="flex flex-col gap-3">
                         {vll.currentLetter.map((letter, index) => (
                             <button
-                                key={`${letter}-${index}`}
+                                key={letter}
                                 className={`
                                 h-16 rounded-2xl border text-3xl font-black transition
                                 hover:scale-[1.02] active:scale-[0.98]
@@ -132,9 +131,9 @@ function RouteComponent() {
                     </h2>
 
                     <div className="grid h-8/9 grid-cols-1 gap-4">
-                        {vll.currentCategory.map((category, index) => (
+                        {vll.currentCategory.map((category) => (
                             <div
-                                key={`${category}-${index}`}
+                                key={category}
                                 className="
                                     flex items-center
                                     rounded-2xl

@@ -17,25 +17,21 @@ export class VllBoardState {
             : VLL_TEAMS.TEAM_W;
     }
 
-    public drawCard(type: "letter" | "category") {
-        switch (type) {
-            case "category": {
-                if (this.categoriesDeck.length < 5) return;
-                for (let i = 0; i < 5; i++) {
-                    this.currentCategory[i] = this.categoriesDeck.splice(
-                        Math.floor(Math.random() * this.categoriesDeck.length),
-                        1
-                    )[0];
-                }
-            }
-            // eslint-disable-next-line no-fallthrough
-            case "letter": {
-                this.currentLetter = this.lettersDeck.splice(
-                    Math.floor(Math.random() * this.lettersDeck.length),
+    public drawCard(drawCategory: boolean) {
+        if (drawCategory) {
+            if (this.categoriesDeck.length < 5) return;
+            for (let i = 0; i < 5; i++) {
+                this.currentCategory[i] = this.categoriesDeck.splice(
+                    Math.floor(Math.random() * this.categoriesDeck.length),
                     1
                 )[0];
             }
         }
+
+        this.currentLetter = this.lettersDeck.splice(
+            Math.floor(Math.random() * this.lettersDeck.length),
+            1
+        )[0];
     }
 
     public scorePoints(points: number) {

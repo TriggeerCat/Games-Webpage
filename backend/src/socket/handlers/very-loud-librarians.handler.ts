@@ -18,7 +18,7 @@ class VeryLoudLibrariansHandler {
         onSafe(socket, "vll:start-round", (roomCode: string) => {
             const game = this.getGame(roomCode);
             game.startRound();
-            game.drawCard("category");
+            game.drawCard(true);
             io.to(roomCode).emit("vll:update-game", game.getState());
 
             setTimeout(() => {
@@ -35,17 +35,9 @@ class VeryLoudLibrariansHandler {
             ({ point, roomCode }: { point: number; roomCode: string }) => {
                 const game = this.getGame(roomCode);
 
-                switch (point) {
-                    case 1:
-                    case -1:
-                        game.drawCard("letter");
-                        game.scorePoints(point);
-                        break;
-                    case 2:
-                        game.drawCard("category");
-                        game.scorePoints(point);
-                        break;
-                }
+                game.drawCard(point === 2);
+                game.scorePoints(point);
+
                 io.to(roomCode).emit("vll:update-game", game.getState());
             }
         );
