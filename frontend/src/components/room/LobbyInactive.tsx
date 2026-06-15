@@ -87,9 +87,7 @@ export const LobbyInactive = () => {
                 </section>
 
                 <section className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
-                    <h2 className="mb-4 text-xl font-bold text-white">
-                        Вставити щось сюди потім
-                    </h2>
+                    <h2 className="mb-4 text-xl font-bold text-white"></h2>
 
                     <div className="grid h-[calc(100%-40px)] grid-cols-2 gap-4"></div>
                 </section>

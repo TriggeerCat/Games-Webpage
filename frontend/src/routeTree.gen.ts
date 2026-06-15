@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RoomRouteRouteImport } from './routes/room/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GamesIndexRouteImport } from './routes/games/index'
 import { Route as PlayerUpdateRouteImport } from './routes/player/update'
 import { Route as PlayerCreateRouteImport } from './routes/player/create'
 import { Route as RoomActionsJoinRouteImport } from './routes/room/actions/join'
@@ -19,7 +18,9 @@ import { Route as RoomActionsCreateRouteImport } from './routes/room/actions/cre
 import { Route as RoomRoomRoomCodeRouteRouteImport } from './routes/room/room.$roomCode/route'
 import { Route as RoomRoomRoomCodeIndexRouteImport } from './routes/room/room.$roomCode/index'
 import { Route as RoomRoomRoomCodeGameRouteRouteImport } from './routes/room/room.$roomCode/game/route'
+import { Route as RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteImport } from './routes/room/room.$roomCode/game/very-loud-librarians/route'
 import { Route as RoomRoomRoomCodeGameTicTacToeRouteRouteImport } from './routes/room/room.$roomCode/game/tic-tac-toe/route'
+import { Route as RoomRoomRoomCodeGameVeryLoudLibrariansIndexRouteImport } from './routes/room/room.$roomCode/game/very-loud-librarians/index'
 import { Route as RoomRoomRoomCodeGameTicTacToeIndexRouteImport } from './routes/room/room.$roomCode/game/tic-tac-toe/index'
 
 const RoomRouteRoute = RoomRouteRouteImport.update({
@@ -30,11 +31,6 @@ const RoomRouteRoute = RoomRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesIndexRoute = GamesIndexRouteImport.update({
-  id: '/games/',
-  path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayerUpdateRoute = PlayerUpdateRouteImport.update({
@@ -73,11 +69,23 @@ const RoomRoomRoomCodeGameRouteRoute =
     path: '/game',
     getParentRoute: () => RoomRoomRoomCodeRouteRoute,
   } as any)
+const RoomRoomRoomCodeGameVeryLoudLibrariansRouteRoute =
+  RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteImport.update({
+    id: '/very-loud-librarians',
+    path: '/very-loud-librarians',
+    getParentRoute: () => RoomRoomRoomCodeGameRouteRoute,
+  } as any)
 const RoomRoomRoomCodeGameTicTacToeRouteRoute =
   RoomRoomRoomCodeGameTicTacToeRouteRouteImport.update({
     id: '/tic-tac-toe',
     path: '/tic-tac-toe',
     getParentRoute: () => RoomRoomRoomCodeGameRouteRoute,
+  } as any)
+const RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute =
+  RoomRoomRoomCodeGameVeryLoudLibrariansIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => RoomRoomRoomCodeGameVeryLoudLibrariansRouteRoute,
   } as any)
 const RoomRoomRoomCodeGameTicTacToeIndexRoute =
   RoomRoomRoomCodeGameTicTacToeIndexRouteImport.update({
@@ -91,26 +99,27 @@ export interface FileRoutesByFullPath {
   '/room': typeof RoomRouteRouteWithChildren
   '/player/create': typeof PlayerCreateRoute
   '/player/update': typeof PlayerUpdateRoute
-  '/games': typeof GamesIndexRoute
   '/room/room/$roomCode': typeof RoomRoomRoomCodeRouteRouteWithChildren
   '/room/actions/create': typeof RoomActionsCreateRoute
   '/room/actions/join': typeof RoomActionsJoinRoute
   '/room/room/$roomCode/game': typeof RoomRoomRoomCodeGameRouteRouteWithChildren
   '/room/room/$roomCode/': typeof RoomRoomRoomCodeIndexRoute
   '/room/room/$roomCode/game/tic-tac-toe': typeof RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren
+  '/room/room/$roomCode/game/very-loud-librarians': typeof RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteWithChildren
   '/room/room/$roomCode/game/tic-tac-toe/': typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
+  '/room/room/$roomCode/game/very-loud-librarians/': typeof RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/room': typeof RoomRouteRouteWithChildren
   '/player/create': typeof PlayerCreateRoute
   '/player/update': typeof PlayerUpdateRoute
-  '/games': typeof GamesIndexRoute
   '/room/actions/create': typeof RoomActionsCreateRoute
   '/room/actions/join': typeof RoomActionsJoinRoute
   '/room/room/$roomCode/game': typeof RoomRoomRoomCodeGameRouteRouteWithChildren
   '/room/room/$roomCode': typeof RoomRoomRoomCodeIndexRoute
   '/room/room/$roomCode/game/tic-tac-toe': typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
+  '/room/room/$roomCode/game/very-loud-librarians': typeof RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,14 +127,15 @@ export interface FileRoutesById {
   '/room': typeof RoomRouteRouteWithChildren
   '/player/create': typeof PlayerCreateRoute
   '/player/update': typeof PlayerUpdateRoute
-  '/games/': typeof GamesIndexRoute
   '/room/room/$roomCode': typeof RoomRoomRoomCodeRouteRouteWithChildren
   '/room/actions/create': typeof RoomActionsCreateRoute
   '/room/actions/join': typeof RoomActionsJoinRoute
   '/room/room/$roomCode/game': typeof RoomRoomRoomCodeGameRouteRouteWithChildren
   '/room/room/$roomCode/': typeof RoomRoomRoomCodeIndexRoute
   '/room/room/$roomCode/game/tic-tac-toe': typeof RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren
+  '/room/room/$roomCode/game/very-loud-librarians': typeof RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteWithChildren
   '/room/room/$roomCode/game/tic-tac-toe/': typeof RoomRoomRoomCodeGameTicTacToeIndexRoute
+  '/room/room/$roomCode/game/very-loud-librarians/': typeof RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -134,40 +144,42 @@ export interface FileRouteTypes {
     | '/room'
     | '/player/create'
     | '/player/update'
-    | '/games'
     | '/room/room/$roomCode'
     | '/room/actions/create'
     | '/room/actions/join'
     | '/room/room/$roomCode/game'
     | '/room/room/$roomCode/'
     | '/room/room/$roomCode/game/tic-tac-toe'
+    | '/room/room/$roomCode/game/very-loud-librarians'
     | '/room/room/$roomCode/game/tic-tac-toe/'
+    | '/room/room/$roomCode/game/very-loud-librarians/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/room'
     | '/player/create'
     | '/player/update'
-    | '/games'
     | '/room/actions/create'
     | '/room/actions/join'
     | '/room/room/$roomCode/game'
     | '/room/room/$roomCode'
     | '/room/room/$roomCode/game/tic-tac-toe'
+    | '/room/room/$roomCode/game/very-loud-librarians'
   id:
     | '__root__'
     | '/'
     | '/room'
     | '/player/create'
     | '/player/update'
-    | '/games/'
     | '/room/room/$roomCode'
     | '/room/actions/create'
     | '/room/actions/join'
     | '/room/room/$roomCode/game'
     | '/room/room/$roomCode/'
     | '/room/room/$roomCode/game/tic-tac-toe'
+    | '/room/room/$roomCode/game/very-loud-librarians'
     | '/room/room/$roomCode/game/tic-tac-toe/'
+    | '/room/room/$roomCode/game/very-loud-librarians/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -175,7 +187,6 @@ export interface RootRouteChildren {
   RoomRouteRoute: typeof RoomRouteRouteWithChildren
   PlayerCreateRoute: typeof PlayerCreateRoute
   PlayerUpdateRoute: typeof PlayerUpdateRoute
-  GamesIndexRoute: typeof GamesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,13 +203,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/': {
-      id: '/games/'
-      path: '/games'
-      fullPath: '/games'
-      preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/player/update': {
@@ -250,12 +254,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoomRoomRoomCodeGameRouteRouteImport
       parentRoute: typeof RoomRoomRoomCodeRouteRoute
     }
+    '/room/room/$roomCode/game/very-loud-librarians': {
+      id: '/room/room/$roomCode/game/very-loud-librarians'
+      path: '/very-loud-librarians'
+      fullPath: '/room/room/$roomCode/game/very-loud-librarians'
+      preLoaderRoute: typeof RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteImport
+      parentRoute: typeof RoomRoomRoomCodeGameRouteRoute
+    }
     '/room/room/$roomCode/game/tic-tac-toe': {
       id: '/room/room/$roomCode/game/tic-tac-toe'
       path: '/tic-tac-toe'
       fullPath: '/room/room/$roomCode/game/tic-tac-toe'
       preLoaderRoute: typeof RoomRoomRoomCodeGameTicTacToeRouteRouteImport
       parentRoute: typeof RoomRoomRoomCodeGameRouteRoute
+    }
+    '/room/room/$roomCode/game/very-loud-librarians/': {
+      id: '/room/room/$roomCode/game/very-loud-librarians/'
+      path: '/'
+      fullPath: '/room/room/$roomCode/game/very-loud-librarians/'
+      preLoaderRoute: typeof RoomRoomRoomCodeGameVeryLoudLibrariansIndexRouteImport
+      parentRoute: typeof RoomRoomRoomCodeGameVeryLoudLibrariansRouteRoute
     }
     '/room/room/$roomCode/game/tic-tac-toe/': {
       id: '/room/room/$roomCode/game/tic-tac-toe/'
@@ -282,14 +300,32 @@ const RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren =
     RoomRoomRoomCodeGameTicTacToeRouteRouteChildren,
   )
 
+interface RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteChildren {
+  RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute: typeof RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute
+}
+
+const RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteChildren: RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteChildren =
+  {
+    RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute:
+      RoomRoomRoomCodeGameVeryLoudLibrariansIndexRoute,
+  }
+
+const RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteWithChildren =
+  RoomRoomRoomCodeGameVeryLoudLibrariansRouteRoute._addFileChildren(
+    RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteChildren,
+  )
+
 interface RoomRoomRoomCodeGameRouteRouteChildren {
   RoomRoomRoomCodeGameTicTacToeRouteRoute: typeof RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren
+  RoomRoomRoomCodeGameVeryLoudLibrariansRouteRoute: typeof RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteWithChildren
 }
 
 const RoomRoomRoomCodeGameRouteRouteChildren: RoomRoomRoomCodeGameRouteRouteChildren =
   {
     RoomRoomRoomCodeGameTicTacToeRouteRoute:
       RoomRoomRoomCodeGameTicTacToeRouteRouteWithChildren,
+    RoomRoomRoomCodeGameVeryLoudLibrariansRouteRoute:
+      RoomRoomRoomCodeGameVeryLoudLibrariansRouteRouteWithChildren,
   }
 
 const RoomRoomRoomCodeGameRouteRouteWithChildren =
@@ -333,7 +369,6 @@ const rootRouteChildren: RootRouteChildren = {
   RoomRouteRoute: RoomRouteRouteWithChildren,
   PlayerCreateRoute: PlayerCreateRoute,
   PlayerUpdateRoute: PlayerUpdateRoute,
-  GamesIndexRoute: GamesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

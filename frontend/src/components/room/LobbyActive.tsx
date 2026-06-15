@@ -26,13 +26,7 @@ export const LobbyActive = () => {
                     </div>
                 </section>
 
-                <section className="flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                    <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-radial-[circle_at_center] from-[#3cff52] via-[#7182ff] to-[#3cff52] bg-[length:200%] animate-gradient">
-                        Гра
-                    </h1>
-                </section>
-
-                <section className="row-span-2 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 overflow-hidden">
+                <section className="row-span-3 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 overflow-hidden">
                     <Outlet />
                 </section>
             </div>
